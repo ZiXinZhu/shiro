@@ -21,8 +21,8 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
         bean.setSecurityManager( manager);
         //配置登录的url和登录成功的url
-        bean.setLoginUrl("/login.jsp");
-        bean.setSuccessUrl("/index");
+        bean.setLoginUrl("/login.html");
+        bean.setSuccessUrl("/hello.html");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
         filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问

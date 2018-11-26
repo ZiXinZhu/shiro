@@ -22,16 +22,16 @@ public class UserController {
         return "login";
     }
     @RequestMapping("/loginUser")
-    public String loginUser(String username,String password,HttpSession session) {
-        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(username,password);
+    public String loginUser(String userName,String password,HttpSession session) {
+        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(userName,password);
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(usernamePasswordToken);   //完成登录
             UserEntity user=(UserEntity) subject.getPrincipal();
             session.setAttribute("user", user);
-            return "index";
+            return "1";
         } catch(Exception e) {
-            return "login";//返回登录页面
+            return "login.html";//返回登录页面
         }
 
     }
