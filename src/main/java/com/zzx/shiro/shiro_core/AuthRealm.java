@@ -23,19 +23,7 @@ public class AuthRealm extends AuthorizingRealm {
     @Autowired
     UserService userService;
 
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        UserEntity user = (UserEntity) principalCollection.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户
-        List<String> permissions = new ArrayList<>();
-        permissions.add(String.valueOf(user.getPower()));
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addStringPermissions(permissions);//将权限放入shiro中.
-        //获取并添加用户所有角色
-        Set<String> roles = userService.getRoleByName(user.getUserName());
-        info.setRoles(roles);
 
-        return info;
-    }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -51,6 +39,18 @@ public class AuthRealm extends AuthorizingRealm {
         // return new SimpleAuthenticationInfo(user, user.getPassword(), this.getClass().getName());
         return simpleAuthenticationInfo;
     }
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        UserEntity user = (UserEntity) principalCollection.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户
+        List<String> permissions = new ArrayList<>();
+        permissions.add(String.valueOf(user.getPower()));
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.addStringPermissions(permissions);//将权限放入shiro中.
+        //获取并添加用户所有角色
+        Set<String> roles = userService.getRoleByName(user.getUserName());
+        info.setRoles(roles);
 
+        return info;
+    }
 
 }

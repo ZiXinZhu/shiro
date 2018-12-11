@@ -35,6 +35,8 @@ public class UserService {
             subject.checkRole(UserEnum.KXJ.getRoleName());
             subject.checkRole(UserEnum.YS.getRoleName());
             log.info("欢迎用户:{}登录！",((UserEntity) subject.getPrincipal()).getUserName());
+            subject.checkPermission("1");
+            log.info("用户：{}拥有：{}权限",((UserEntity) subject.getPrincipal()).getUserName(),user.getPower());
             return "1";
         } catch(Exception e) {
             log.info("权限不足");
