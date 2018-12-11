@@ -1,7 +1,5 @@
 package com.zzx.shiro.shiro_core;
 
-import com.zzx.shiro.entity.RoleEntity;
-import com.zzx.shiro.entity.RoleEnumEntity;
 import com.zzx.shiro.entity.UserEntity;
 import com.zzx.shiro.service.UserService;
 import org.apache.shiro.authc.*;
@@ -52,5 +50,10 @@ public class AuthRealm extends AuthorizingRealm {
 
         return info;
     }
+
+
+
+
+
 
 }

@@ -1,18 +1,18 @@
 package com.zzx.shiro.service;
 
 import com.zzx.shiro.dao.UserDao;
-import com.zzx.shiro.entity.RoleEnumEntity;
 import com.zzx.shiro.entity.UserEntity;
 import com.zzx.shiro.enums.UserEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -57,6 +57,26 @@ public class UserService {
     }
 
     public int add(String userName ,String password){
-        return userDao.add(userName,password);
+        UserEntity userEntity=userDao.get(userName);
+        if(userEntity!=null){
+            return 0;
+        }
+       /*
+       //加盐：方法一
+        Random random=new Random();
+        Integer salt=random.nextInt(900000000)+100000000;
+        Md5Hash md5Hash=new Md5Hash(password+salt);
+        log.info("md5Hash:{}",md5Hash);
+        return userDao.add(userName, String.valueOf(md5Hash),salt);*/
+
+        //加盐：方法二
+        String algorithmName  ="MD5";
+        Object source =password;
+        Random random=new Random();
+        String salt  = String.valueOf(random.nextInt(900000000)+100000000);
+        int  hashIterations =1024;
+        Object result =  new SimpleHash(algorithmName, source, salt, hashIterations);
+
+        return userDao.add(userName, String.valueOf(result),salt);
     }
 }
