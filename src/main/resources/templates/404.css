@@ -1,0 +1,8 @@
+html,body{height: 100%;width: 100%;}
+.info{display: inline-block;padding-top: 40px;vertical-align: top;}
+.title{padding-bottom: 18px;font-size:medium}
+.reason{padding-bottom: 12px;font-size: small}
+.oper{font-size: small}
+.bg_img{display:inline-block;background: url("404.jpg")no-repeat;background-size:100% 100%;width: 554px;height: 293px;position: relative;left: -30px; }
+.message{position: absolute;top:135px;left:200px;font-size: 40px;color: #fff;font-family: "Arial Black"}
+.content{width: 800px;margin: 0 auto;height: 100%;padding-top: 100px}
