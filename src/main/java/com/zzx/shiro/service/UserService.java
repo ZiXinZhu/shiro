@@ -2,7 +2,6 @@ package com.zzx.shiro.service;
 
 import com.zzx.shiro.dao.UserDao;
 import com.zzx.shiro.entity.UserEntity;
-import com.zzx.shiro.enums.UserEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -25,40 +24,40 @@ public class UserService {
     @Autowired
     UserDao userDao;
 
-    public String login(String userName,String password,HttpSession session) {
-        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(userName,password);
+    public String login(String userName, String password, HttpSession session) {
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(usernamePasswordToken);   //完成登录
-            UserEntity user=(UserEntity) subject.getPrincipal();
+            UserEntity user = (UserEntity) subject.getPrincipal();
             session.setAttribute("user", user);
-            subject.checkRole(UserEnum.KXJ.getRoleName());
-            subject.checkRole(UserEnum.YS.getRoleName());
-            log.info("欢迎用户:{}登录！",((UserEntity) subject.getPrincipal()).getUserName());
+            //subject.checkRole(UserEnum.KXJ.getRoleName());
+            //subject.checkRole(UserEnum.YS.getRoleName());
+            //log.info("欢迎用户:{}登录！",((UserEntity) subject.getPrincipal()).getUserName());
             subject.checkPermission("1");
-            log.info("用户：{}拥有：{}权限",((UserEntity) subject.getPrincipal()).getUserName(),user.getPower());
+            log.info("用户：{}拥有：{}权限", ((UserEntity) subject.getPrincipal()).getUserName(), user.getPower());
             return "1";
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.info("权限不足");
             return "login.html";//返回登录页面
         }
     }
 
-   public Set<String> getRoleByName(String userName){
-      return userDao.getRolesByName(userName);
-   }
+    public Set<String> getRoleByName(String userName) {
+        return userDao.getRolesByName(userName);
+    }
 
-    public UserEntity get(String userName){
-        UserEntity userEntity=userDao.get(userName);
-        if(userEntity!=null){
+    public UserEntity get(String userName) {
+        UserEntity userEntity = userDao.get(userName);
+        if (userEntity != null) {
             return userEntity;
         }
         return null;
     }
 
-    public int add(String userName ,String password){
-        UserEntity userEntity=userDao.get(userName);
-        if(userEntity!=null){
+    public int add(String userName, String password) {
+        UserEntity userEntity = userDao.get(userName);
+        if (userEntity != null) {
             return 0;
         }
        /*
@@ -70,13 +69,14 @@ public class UserService {
         return userDao.add(userName, String.valueOf(md5Hash),salt);*/
 
         //加盐：方法二
-        String algorithmName  ="MD5";
-        Object source =password;
-        Random random=new Random();
-        String salt  = String.valueOf(random.nextInt(900000000)+100000000);
-        int  hashIterations =1024;
-        Object result =  new SimpleHash(algorithmName, source, salt, hashIterations);
+        String algorithmName = "MD5";
+        Object source = password;
+        Random random = new Random();
+        String salt = String.valueOf(random.nextInt(900000000) + 100000000);
+        int hashIterations = 1024;
+        Object result = new SimpleHash(algorithmName, source, salt, hashIterations);
 
-        return userDao.add(userName, String.valueOf(result),salt);
+        return userDao.add(userName, String.valueOf(result), salt);
     }
+
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,7 +20,7 @@ public interface UserDao {
             @Param("salt")String salt);
 
     @Select("SELECT count(id) FROM user WHERE user_name=#{userName} and password=#{password}")
-    int log(@Param("userName") String userName,
+    int getOne(@Param("userName") String userName,
             @Param("password") String password);
 
     @Select("SELECT * FROM user WHERE user_name=#{userName}")
@@ -27,4 +28,5 @@ public interface UserDao {
 
     @Select("SELECT a.role_name FROM role_enum a right join roles b on a.id=b.role left join user c on c.id=b.user_id where c.user_name=#{userName} ")
     Set<String> getRolesByName(@Param("userName")String userName);
+
 }
