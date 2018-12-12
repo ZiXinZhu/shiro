@@ -1,6 +1,9 @@
 package com.zzx.shiro.controller;
 
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 import com.zzx.shiro.dao.UserDao;
+import com.zzx.shiro.jpush.JPushService;
 import com.zzx.shiro.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -11,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Mr.John on 2018/11/23 17:49.
@@ -21,6 +28,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    JPushService jPushService;
     @Autowired
     UserDao userDao;
 
@@ -65,4 +74,14 @@ public class UserController {
             return "404.html";
         }
     }
+
+    @RequestMapping("/jpush")
+    public boolean setms(String userId) throws ParseException, APIConnectionException, APIRequestException {
+        String s="2018-12-12";
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        Date date=dateFormat.parse(s);
+        return jPushService.withdrawSuccess(userId,date);
+
+    }
+
 }
