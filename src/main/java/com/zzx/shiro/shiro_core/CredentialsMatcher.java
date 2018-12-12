@@ -17,6 +17,13 @@ public class CredentialsMatcher extends SimpleCredentialsMatcher {
 
     @Autowired
     UserService userService;
+
+    /**
+     * 密码验证
+     * @param token
+     * @param info
+     * @return
+     */
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         UsernamePasswordToken utoken=(UsernamePasswordToken) token;

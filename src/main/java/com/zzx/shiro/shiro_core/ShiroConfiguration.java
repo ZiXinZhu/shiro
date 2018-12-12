@@ -1,5 +1,6 @@
 package com.zzx.shiro.shiro_core;
 
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -8,35 +9,48 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.shiro.mgt.SecurityManager;
+
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by Mr.John on 2018/11/22 22:08.
  **/
 @Configuration
 public class ShiroConfiguration {
+
+
+    /**
+     * filter配置
+     * @param manager
+     * @return
+     */
     @Bean(name="shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
-        bean.setSecurityManager( manager);
+        bean.setSecurityManager(manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/login.html");
         bean.setSuccessUrl("/hello.html");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/register.html", "anon");
-        filterChainDefinitionMap.put("/logout*","anon");
+        filterChainDefinitionMap.put("/register.html", "anon");//anon不需要认证，直接访问
+        filterChainDefinitionMap.put("/logout*","anon");//anon不需要认证，直接访问
         filterChainDefinitionMap.put("/loginUser","anon");
         filterChainDefinitionMap.put("/register","anon");
         filterChainDefinitionMap.put("/jsp/error.jsp*","anon");
-        filterChainDefinitionMap.put("/jsp/index.jsp*","authc");
-        filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
+        filterChainDefinitionMap.put("/role", "roles[科学家]");//要有【科学家】角色的用户才能访问
+        filterChainDefinitionMap.put("/*","perms[1]");
+        filterChainDefinitionMap.put("/role","perms[2]");
+        filterChainDefinitionMap.put("/jsp/index.jsp*","authc");//authc表示需要认证才可以访问
+        filterChainDefinitionMap.put("/*", "authc");//authc表示需要认证才可以访问
+        filterChainDefinitionMap.put("/**", "authc");
         filterChainDefinitionMap.put("/*.*", "authc");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
+
     //配置核心安全事务管理器
     @Bean(name="securityManager")
     public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {

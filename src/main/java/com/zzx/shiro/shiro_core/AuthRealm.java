@@ -22,7 +22,12 @@ public class AuthRealm extends AuthorizingRealm {
     UserService userService;
 
 
-
+    /**
+     * 认证
+     * @param authenticationToken
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken utoken = (UsernamePasswordToken) authenticationToken;
@@ -37,6 +42,12 @@ public class AuthRealm extends AuthorizingRealm {
         // return new SimpleAuthenticationInfo(user, user.getPassword(), this.getClass().getName());
         return simpleAuthenticationInfo;
     }
+
+    /**
+     * 权限
+     * @param principalCollection
+     * @return
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         UserEntity user = (UserEntity) principalCollection.fromRealm(this.getClass().getName()).iterator().next();//获取session中的用户

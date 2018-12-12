@@ -56,4 +56,13 @@ public class UserController {
             return "hello.html";
         }
     }
+
+    @RequestMapping("/role")
+    public Object role() {
+        try {
+            return userDao.getOne("aaa", "ea124fc9c09b8d8284e927e66b921760");
+        }catch (Exception e){
+            return "404.html";
+        }
+    }
 }

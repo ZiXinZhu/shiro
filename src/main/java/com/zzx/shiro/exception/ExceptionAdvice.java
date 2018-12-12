@@ -24,5 +24,4 @@ public class ExceptionAdvice extends Exception{
         log.info("--------------AuthorizationException--------------");
         return "你没得权限，爬！";
     }
-
 }
