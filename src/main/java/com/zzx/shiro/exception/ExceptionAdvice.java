@@ -22,7 +22,7 @@ public class ExceptionAdvice extends Exception{
     public Object handleException(Exception e){
 //        e.printStackTrace();
         log.info("--------------AuthorizationException--------------");
-        return 0;
+        return "你没得权限，爬！";
     }
 
 }
