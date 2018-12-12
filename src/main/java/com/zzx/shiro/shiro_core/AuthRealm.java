@@ -35,6 +35,7 @@ public class AuthRealm extends AuthorizingRealm {
         String userName = utoken.getUsername();
         //通过用户名到数据库中获取凭证，通过用户名获取密码
         UserEntity user = userService.get(userName);
+        System.out.println("从数据库获取数据。。。");
         if (user == null) {
             return null;
         }

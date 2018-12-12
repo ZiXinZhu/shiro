@@ -10,16 +10,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Created by Mr.John on 2018/11/22 22:08.
  **/
 @Configuration
 public class ShiroConfiguration {
-
 
     /**
      * filter配置
