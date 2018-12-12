@@ -81,7 +81,7 @@ public class UserController {
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
         Date date=dateFormat.parse(s);
         return jPushService.withdrawSuccess(userId,date);
-
+        //回调报错[1011]因为还没有推送目标
     }
 
 }
