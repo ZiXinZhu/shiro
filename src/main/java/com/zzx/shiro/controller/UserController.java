@@ -3,8 +3,10 @@ package com.zzx.shiro.controller;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.bcel.internal.generic.GOTO;
 import com.zzx.shiro.dao.UserDao;
+import com.zzx.shiro.entity.UserEntity;
 import com.zzx.shiro.jpush.JPushService;
 import com.zzx.shiro.message_check.CheckSumBuilder;
 import com.zzx.shiro.service.UserService;
@@ -183,6 +185,11 @@ public class UserController {
         Date date=dateFormat.parse(s);
         return jPushService.withdrawSuccess(userId,date);
         //TODO  回调报错[1011]因为还没有推送目标
+    }
+
+    @RequestMapping("/page")
+    public PageInfo<UserEntity> page(int pn){
+        return userService.page(pn);
     }
 
 }

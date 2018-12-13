@@ -28,5 +28,6 @@ public interface UserDao {
 
     @Select("SELECT a.role_name FROM role_enum a right join roles b on a.id=b.role left join user c on c.id=b.user_id where c.user_name=#{userName} ")
     Set<String> getRolesByName(@Param("userName")String userName);
-
+    @Select("SELECT * FROM user ")
+    List<UserEntity> getAll();
 }
