@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.Set;
 
@@ -82,12 +84,23 @@ public class UserService {
         return userDao.add(userName, String.valueOf(result), salt);
     }
 
+    public static void md5Hash() {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("md5");
+            md5.digest("".getBytes("utf8"));
+
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public PageInfo<UserEntity> page(int pn) {
         //TODO 使用的时候还需要添加maven依赖，application.properties中配置
-        PageHelper.startPage(pn, 5);
+        return PageHelper.startPage(pn, 3).setOrderBy("salt desc").doSelectPageInfo(() -> userDao.getAll());
+        /*PageHelper.startPage(pn, 5);
         List<UserEntity> userEntities = userDao.getAll();
         PageInfo<UserEntity> p=new PageInfo<UserEntity>(userEntities);
         log.info("获取内容：{}", p);
-        return p;
+        return p;*/
     }
 }

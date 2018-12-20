@@ -19,8 +19,8 @@ public interface UserDao {
             @Param("password") String password,
             @Param("salt")String salt);
 
-    @Select("SELECT count(id) FROM user WHERE user_name=#{userName} and password=#{password}")
-    int getOne(@Param("userName") String userName,
+    @Select("SELECT * FROM user WHERE user_name=#{userName} and password=#{password}")
+    UserEntity getOne(@Param("userName") String userName,
             @Param("password") String password);
 
     @Select("SELECT * FROM user WHERE user_name=#{userName}")

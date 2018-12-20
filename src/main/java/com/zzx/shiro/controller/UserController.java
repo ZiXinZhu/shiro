@@ -5,6 +5,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.bcel.internal.generic.GOTO;
+import com.zzx.shiro.Emali.SendEmail;
 import com.zzx.shiro.dao.UserDao;
 import com.zzx.shiro.entity.UserEntity;
 import com.zzx.shiro.jpush.JPushService;
@@ -22,6 +23,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,7 +67,12 @@ public class UserController {
     JPushService jPushService;
     @Autowired
     UserDao userDao;
-
+    @Autowired
+    private JavaMailSender sender;
+    @RequestMapping("/send")
+    public void send() {
+        new Thread(new SendEmail(sender,"1101648204@qq.com","863486267@qq.com","654321")).start();
+    }
     @RequestMapping("/loginUser")
     public String loginUser(String userName, String password, HttpSession session) {
         return userService.login(userName, password, session);
@@ -117,7 +124,7 @@ public class UserController {
             //获取code，msg，obj（验证码）
 
             map = (Map) JSONObject.parse(EntityUtils.toString(response_app.getEntity()));
-            String rePhone=MOBILE.substring(3,9);
+            //String rePhone=MOBILE.substring(3,9);
             map.put("rePhone",MOBILE);
             System.out.println(EntityUtils.toString(response_app.getEntity(), "utf-8"));
         } catch (Exception e) {
@@ -131,7 +138,7 @@ public class UserController {
     @RequestMapping("/register")
     public Object add(String phone, String password,int objs) {
         long start = System.currentTimeMillis();
-        if (System.currentTimeMillis() - start > 1000 * 60 * 10) {
+        if (System.currentTimeMillis() - start > 1000 * 60) {
             map.remove("obj");
             map.remove("code");
         }
