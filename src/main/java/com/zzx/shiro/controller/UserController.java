@@ -11,6 +11,7 @@ import com.zzx.shiro.entity.UserEntity;
 import com.zzx.shiro.jpush.JPushService;
 import com.zzx.shiro.message_check.CheckSumBuilder;
 import com.zzx.shiro.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,12 +25,11 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,6 +40,7 @@ import java.util.*;
  **/
 
 @RestController
+@Slf4j
 public class UserController {
 
     Map map = new HashMap();
@@ -197,6 +198,15 @@ public class UserController {
     @RequestMapping("/page")
     public PageInfo<UserEntity> page(int pn){
         return userService.page(pn);
+    }
+
+    @GetMapping("/ip")
+    public void getIp() throws UnknownHostException {
+        InetAddress addr = InetAddress.getLocalHost();
+        String ad=addr.getHostAddress().toString();
+        log.info("IP:{}",ad);
+        String name=addr.getHostName().toString();
+        log.info("NAME:{}",name);
     }
 
 }
